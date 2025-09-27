@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - DocuAI Navigator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4a69e2;
+      --secondary-color: #1e293b;
+      --text-color: #64748b;
+      --heading-color: #334155;
+      --light-grey: #f1f5f9;
+      --white: #ffffff;
+      --border-color: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      display: flex;
+      min-height: 100vh;
+      color: var(--text-color);
+    }
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(160deg, #00467F, #A5CC82);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      min-height: 100vh;
+    }
+    .sidebar-header {
+      padding: 25px;
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-content {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      font-weight: 300;
+    }
+    .sidebar-footer {
+      padding: 25px 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-link {
+      display: block;
+      color: var(--white);
+      text-decoration: none;
+      padding: 12px 0;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background 0.2s;
+      border-radius: 6px;
+      margin: 0 10px;
+    }
+    .sidebar-link:hover {
+      background: rgba(255,255,255,0.08);
+    }
+    .main {
+      flex: 1;
+      padding: 40px 30px;
+      background: var(--light-grey);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--heading-color);
+      margin-bottom: 18px;
+    }
+    h2 {
+      font-size: 22px;
+      color: var(--heading-color);
+      margin-top: 32px;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    ul {
+      margin: 0 0 18px 20px;
+      padding: 0;
+    }
+    li {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <span class="logo">DocuAI Navigator</span>
+    </div>
+    <div class="sidebar-content">
+      <a href="dashboard.html" class="sidebar-link">Dashboard</a>
+      <a href="about.html" class="sidebar-link" style="background:rgba(255,255,255,0.08);">About</a>
+    </div>
+    <div class="sidebar-footer">
+      <a href="index.html" class="sidebar-link">Logout</a>
+    </div>
+  </div>
+  <div class="main">
+    <h1>About DocuAI Navigator</h1>
+    <p>
+      <strong>DocuAI Navigator</strong> is an AI-powered workspace built to transform the way companies and teams handle information. 
+      Our mission is to <strong>simplify document management, boost collaboration, and unlock insights</strong> using cutting-edge AI technologies. 
+      Whether you’re managing internal documentation, planning projects, or collaborating across departments, DocuAI makes your workflow smarter and faster.
+    </p>
+    
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Document Intelligence</strong> – Upload, organize, and process documents with AI-powered analysis.</li>
+      <li><strong>Smart Project Planning</strong> – Generate step-by-step project roadmaps tailored to your team, tools, and goals.</li>
+      <li><strong>AI-Powered Q&A</strong> – Ask natural language questions about your docs and get accurate, contextual answers.</li>
+      <li><strong>Team & Project Management</strong> – Easily create teams, assign roles, and manage multiple projects.</li>
+      <li><strong>Intuitive Dashboard</strong> – Track projects, documents, and team activities with a clean, modern interface.</li>
+      <li><strong>Secure Collaboration</strong> – Ensure company data privacy while enabling smooth team interaction.</li>
+    </ul>
+
+    <h2>How It Works</h2>
+    <p>DocuAI Navigator combines document management, databases, and AI-driven reasoning into one seamless system:</p>
+    <ol>
+      <li><strong>Register & Login:</strong> Companies register, log in, and set up their digital workspace.</li>
+      <li><strong>Upload Documents:</strong> PDF and project files are securely uploaded, validated, and processed.</li>
+      <li><strong>AI Processing:</strong> Documents are chunked, embedded, and stored in a vector database for retrieval.</li>
+      <li><strong>Project Creation:</strong> Define projects, teams, and goals with customizable forms.</li>
+      <li><strong>Project Planning:</strong> AI generates detailed plans based on domain, team size, roles, and tech stack.</li>
+      <li><strong>Ask & Retrieve:</strong> Teams query documents in natural language, and DocuAI provides intelligent responses.</li>
+    </ol>
+
+    <h2>AI & Technology</h2>
+    <p>
+      DocuAI Navigator uses a <strong>multi-LLM architecture</strong>:
+    </p>
+    <ul>
+      <li><strong>LLM-1 (Extraction):</strong> Identifies names, metadata, and document context.</li>
+      <li><strong>LLM-2 (RAG):</strong> Handles document Q&A with retrieval-augmented generation.</li>
+      <li><strong>LLM-3 (Planning):</strong> Generates structured, actionable project roadmaps.</li>
+    </ul>
+    <p>
+      Backed by <strong>vector databases</strong>, <strong>document chunking</strong>, and <strong>embeddings</strong>, our system ensures fast, accurate, and scalable AI-driven insights.
+    </p>
+
+    <h2>Who Benefits?</h2>
+    <ul>
+      <li>🚀 <strong>Startups</strong> – Organize chaos and accelerate product development.</li>
+      <li>🏢 <strong>Enterprises</strong> – Manage large-scale documentation and cross-team collaboration.</li>
+      <li>🎓 <strong>Research Teams</strong> – Quickly find relevant insights across massive knowledge bases.</li>
+      <li>⚙️ <strong>Engineering & IT</strong> – Plan projects, manage teams, and track technical documentation effortlessly.</li>
+    </ul>
+
+    <h2>Contact & Support</h2>
+    <p>
+      Have questions, suggestions, or partnership ideas? Our team is here to help. 
+      Reach out to us at <a href="aniqramzan5758@gmail.com">support@docuai.com</a>.
+    </p>
+    <p>
+      &copy; 2025 DocuAI Navigator. All rights reserved.
+    </p>
+  </div>
+</body>
+</html>

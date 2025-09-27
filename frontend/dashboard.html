@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DocuAI Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4a69e2;
+      --primary-hover-color: #3b55b5;
+      --secondary-color: #1e293b;
+      --text-color: #64748b;
+      --heading-color: #334155;
+      --light-grey: #f1f5f9;
+      --white: #ffffff;
+      --border-color: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      display: flex;
+      height: 100vh;
+      color: var(--text-color);
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(160deg, #3c3db1, #6b4cbb);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-header {
+      padding: 25px;
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .sidebar-nav { flex: 1; padding: 0 15px; }
+    .sidebar-nav a {
+      color: #e2e8f0; text-decoration: none; padding: 12px 18px;
+      margin: 8px 0; border-radius: 8px; display: flex;
+      align-items: center; gap: 15px; font-weight: 500;
+      transition: all 0.2s ease-in-out;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: rgba(255, 255, 255, 0.15); color: var(--white);
+      transform: translateX(5px);
+    }
+    .sidebar-footer { padding: 25px 15px; }
+    #logoutBtn {
+        width: 100%; color: var(--secondary-color); background: var(--white);
+        border: none; cursor: pointer; font-weight: 500; font-size: 15px;
+        border-radius: 8px; padding: 12px 20px;
+        transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 15px;
+    }
+    #logoutBtn:hover { background-color: var(--light-grey); }
+
+    /* Main Content */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .header {
+      background: var(--white); padding: 18px 30px; border-bottom: 1px solid var(--border-color);
+      font-size: 20px; font-weight: 600; color: var(--heading-color); flex-shrink: 0;
+    }
+    .content { flex: 1; overflow-y: auto; padding: 30px; }
+    
+    /* Action Buttons Container */
+    .actions-container {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    .action-btn {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border: none;
+        padding: 12px 20px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .action-btn:hover {
+        background-color: var(--primary-hover-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Dashboard Cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 30px; }
+    .card {
+      background: var(--white); padding: 25px; border-radius: 12px;
+      border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(100, 116, 139, 0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(100, 116, 139, 0.1); }
+    .card h3 { margin: 0 0 10px; font-size: 16px; font-weight: 500; color: var(--text-color); }
+    .card p { font-size: 36px; font-weight: 700; color: var(--primary-color); margin: 0; }
+    
+    /* Docs List */
+    .docs-container {
+      background: var(--white); padding: 25px; border-radius: 12px;
+      border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(100, 116, 139, 0.05);
+    }
+    .docs-container h3 {
+      font-size: 20px; font-weight: 600; color: var(--heading-color); margin: 0 0 20px;
+      padding-bottom: 15px; border-bottom: 1px solid var(--border-color);
+      display: flex; align-items: center; gap: 10px;
+    }
+    #docsList { list-style: none; padding: 0; margin: 0; }
+    #docsList li { padding: 15px 10px; border-bottom: 1px solid var(--light-grey); font-weight: 500; color: var(--secondary-color); }
+    #docsList li:last-child { border-bottom: none; }
+    #docsList li:empty { color: var(--text-color); font-style: italic; }
+
+    /* Modal Styling */
+    .modal {
+        display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+        width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+        justify-content: center; align-items: center;
+    }
+    .modal-content {
+        background-color: var(--white); padding: 30px; border-radius: 12px;
+        border: 1px solid var(--border-color); box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        width: 400px; max-width: 90%;
+    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .modal-header h2 { margin: 0; color: var(--heading-color); font-size: 22px; }
+    .close-btn { color: var(--text-color); font-size: 28px; font-weight: bold; cursor: pointer; }
+    .close-btn:hover { color: var(--secondary-color); }
+    .modal-form { display: flex; flex-direction: column; gap: 15px; }
+    .modal-form label { font-weight: 500; color: var(--heading-color); }
+    .modal-form input {
+        width: 100%; padding: 12px; border: 1px solid var(--border-color);
+        border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 15px;
+    }
+    .modal-form input:focus {
+        outline: none; border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(74, 105, 226, 0.2);
+    }
+    .modal-form button {
+        margin-top: 10px; background-color: var(--primary-color); color: var(--white);
+        border: none; padding: 12px 20px; font-size: 16px; font-weight: 500;
+        border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease;
+    }
+    .modal-form button:hover { background-color: var(--primary-hover-color); }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">DocuAI Navigator</div>
+    <div class="sidebar-nav">
+      <a href="dashboard.html" class="active">🏠 <span>Dashboard</span></a>
+      <a href="company.html">🏢 <span>Company</span></a>
+      <a href="team.html">👥 <span>Team</span></a>
+      <a href="project.html">📂 <span>Project</span></a>
+      <a href="about.html">ℹ️ <span>About</span></a>
+    </div>
+    <div class="sidebar-footer">
+      <button id="logoutBtn">🚪 <span>Logout Company</span></button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="header" id="companyHeader">Welcome</div>
+    <div class="content">
+      <div class="actions-container">
+        <button id="createTeamBtn" class="action-btn">➕ Create New Team</button>
+        <button id="createProjectBtn" class="action-btn">➕ Create New Project</button>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <h3>Teams</h3>
+          <p id="teamCount">0</p>
+        </div>
+        <div class="card">
+          <h3>Projects</h3>
+          <p id="projectCount">0</p>
+        </div>
+      </div>
+
+      <div class="docs-container">
+        <h3>📑 Company Documents</h3>
+        <ul id="docsList">
+          <li>Loading...</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="teamModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Team</h2>
+        <span class="close-btn" id="closeTeamModal">&times;</span>
+      </div>
+      <form id="teamForm" class="modal-form">
+        <label for="teamName">Team Name</label>
+        <input type="text" id="teamName" required />
+        <label for="teamPassword">Password</label>
+        <input type="password" id="teamPassword" required />
+        <button type="submit">Create Team</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Project</h2>
+        <span class="close-btn" id="closeProjectModal">&times;</span>
+      </div>
+      <form id="projectForm" class="modal-form">
+        <label for="projectName">Project Name</label>
+        <input type="text" id="projectName" required />
+        <label for="projectPassword">Password</label>
+        <input type="password" id="projectPassword" required />
+        <button type="submit">Create Project</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
+    const token = localStorage.getItem("token");
+    if (!token) window.location.href = "index.html";
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`${API_BASE}/company/me`, {
+          headers: { "X-Token": token }
+        });
+        if (!res.ok) { throw new Error("Session expired"); }
+        const data = await res.json();
+        document.getElementById("companyHeader").textContent = `Welcome, ${data.company_name}`;
+        document.getElementById("teamCount").textContent = data.no_of_teams ?? 0;
+        document.getElementById("projectCount").textContent = data.no_of_projects ?? 0;
+        const docsList = document.getElementById("docsList");
+        docsList.innerHTML = "";
+        if (Array.isArray(data.company_files_name) && data.company_files_name.length > 0) {
+          data.company_files_name.forEach(doc => {
+            const li = document.createElement("li");
+            li.textContent = `${doc.pdf_name} (${doc.filename})`;
+            docsList.appendChild(li);
+          });
+        } else {
+          docsList.innerHTML = "<li>No documents uploaded yet</li>";
+        }
+      } catch (err) {
+        alert("Session expired, please login again.");
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+      }
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
+    });
+    
+    // --- Modal Logic ---
+    const teamModal = document.getElementById("teamModal");
+    const projectModal = document.getElementById("projectModal");
+    
+    // Open Modals
+    document.getElementById("createTeamBtn").onclick = () => { teamModal.style.display = "flex"; };
+    document.getElementById("createProjectBtn").onclick = () => { projectModal.style.display = "flex"; };
+
+    // Close Modals
+    document.getElementById("closeTeamModal").onclick = () => { teamModal.style.display = "none"; };
+    document.getElementById("closeProjectModal").onclick = () => { projectModal.style.display = "none"; };
+    window.onclick = (event) => {
+        if (event.target == teamModal) teamModal.style.display = "none";
+        if (event.target == projectModal) projectModal.style.display = "none";
+    };
+
+    // --- Form Submission Logic ---
+    
+    // Team Form Submission
+    document.getElementById("teamForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const team_name = document.getElementById("teamName").value;
+        const team_password = document.getElementById("teamPassword").value;
+
+        try {
+            const res = await fetch(`${API_BASE}/team/team_register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Token": token },
+                body: JSON.stringify({ team_name, team_password })
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || "Failed to create team.");
+            }
+            alert("✅ Team created successfully!");
+            teamModal.style.display = "none"; // Close modal
+            e.target.reset(); // Reset form
+            loadDashboard(); // Refresh dashboard data
+        } catch (err) {
+            alert(`❌ Error: ${err.message}`);
+        }
+    });
+
+    // Project Form Submission
+    document.getElementById("projectForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const project_name = document.getElementById("projectName").value;
+        const project_password = document.getElementById("projectPassword").value;
+
+        try {
+            const res = await fetch(`${API_BASE}/project/project_register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "X-Token": token },
+                body: JSON.stringify({ project_name, project_password })
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.detail || "Failed to create project.");
+            }
+            alert("✅ Project created successfully!");
+            projectModal.style.display = "none"; // Close modal
+            e.target.reset(); // Reset form
+            loadDashboard(); // Refresh dashboard data
+        } catch (err) {
+            alert(`❌ Error: ${err.message}`);
+        }
+    });
+
+    loadDashboard();
+  </script>
+</body>
+</html>

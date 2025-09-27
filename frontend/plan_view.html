@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Project Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a69e2; --secondary-color: #1e293b;
+            --text-color: #64748b; --heading-color: #334155; --light-grey: #f1f5f9;
+            --white: #ffffff; --border-color: #e2e8f0;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--light-grey);
+            display: flex; height: 100vh; color: var(--text-color);
+        }
+        .sidebar {
+            width: 250px; background: linear-gradient(160deg, #00467F, #A5CC82);
+            color: var(--white); display: flex; flex-direction: column; flex-shrink: 0;
+            padding: 25px; text-align: center;
+        }
+        .sidebar h2 { margin-top: 0; }
+        .sidebar p { font-weight: 300; font-size: 0.9em; }
+        .sidebar a {
+            margin-top: auto; display: block; background: var(--white); color: var(--secondary-color);
+            padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sidebar a:hover { background-color: #f0f0f0; transform: translateY(-2px); }
+        .main {
+            flex: 1; overflow-y: auto; padding: 40px;
+        }
+        .plan-header { margin-bottom: 30px; }
+        .plan-header h1 { font-size: 32px; color: var(--heading-color); margin: 0 0 10px; }
+        .plan-header p { font-size: 1.1em; max-width: 80ch; }
+        .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; }
+        .plan-card {
+            background: var(--white); border: 1px solid var(--border-color);
+            padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(100,116,139,0.05);
+        }
+        .plan-card h3 { font-size: 20px; color: var(--heading-color); margin: 0 0 15px; display: flex; align-items: center; gap: 10px; }
+        .pills-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin:0; list-style: none; }
+        .pill { background: var(--primary-color); color: white; padding: 5px 12px; border-radius: 15px; font-size: 14px; }
+        .timeline-card ul { list-style: none; padding: 0; }
+        .timeline-card li { padding: 10px; border-bottom: 1px solid var(--border-color); }
+        .timeline-card li:last-child { border-bottom: none; }
+        .team-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .team-member-card { display: flex; align-items: center; gap: 15px; background: var(--light-grey); padding: 15px; border-radius: 8px; }
+        .team-member-card .avatar { width: 50px; height: 50px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 600; flex-shrink: 0; }
+        .team-member-card .info strong { color: var(--secondary-color); display: block; }
+        .list-card ul { list-style: none; padding: 0; }
+        .list-card li { position: relative; padding-left: 25px; margin-bottom: 10px; }
+        .list-card li::before {
+            content: '✓'; color: var(--primary-color); position: absolute; left: 0; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 id="projectNameHeader">Project</h2>
+        <p>This is the dedicated AI-generated plan for your project.</p>
+        <a id="backToDashboardBtn" href="project_dashboard.html">← Back to Dashboard</a>
+    </div>
+
+    <div class="main">
+        <div id="plan-container">
+            <p>Loading project plan...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const projectData = JSON.parse(sessionStorage.getItem("project_data"));
+            const planData = JSON.parse(sessionStorage.getItem("generated_plan"));
+
+            if (!projectData || !planData) {
+                alert("Could not find project plan data. Returning to dashboard.");
+                window.location.href = "project_dashboard.html";
+                return;
+            }
+
+            // Set project name in sidebar
+            document.getElementById("projectNameHeader").textContent = projectData.project_name || "Project";
+            
+            renderProjectPlan(planData);
+        });
+
+        function renderProjectPlan(planData) {
+            const container = document.getElementById("plan-container");
+            container.innerHTML = ""; // Clear loader
+
+            const plan = planData.plan; // The actual plan is nested
+            if (!plan) {
+                container.innerHTML = "<h1>Error</h1><p>Could not render the project plan.</p>";
+                return;
+            }
+
+            // 1. Create Header
+            const header = document.createElement("div");
+            header.className = "plan-header";
+            header.innerHTML = `
+                <h1>${planData.project_name || 'AI-Generated Project Plan'}</h1>
+                <p>${plan.project_overview || 'No overview provided.'}</p>
+            `;
+            container.appendChild(header);
+
+            // 2. Create Grid for Cards
+            const grid = document.createElement("div");
+            grid.className = "plan-grid";
+            container.appendChild(grid);
+
+            // 3. Create and Append Cards
+            // Timeline
+            if(plan.timeline) {
+                const card = createCard("📅 Timeline", `<ul><li><strong>Duration:</strong> ${plan.timeline.duration || 'N/A'}</li></ul>`, "timeline-card");
+                grid.appendChild(card);
+            }
+            
+            // Tools & Best Practices
+            if(plan.tools_and_practices?.length > 0) {
+                const content = `<ul class="pills-list">${plan.tools_and_practices.map(tool => `<li class="pill">${tool}</li>`).join('')}</ul>`;
+                const card = createCard("🛠️ Tools & Best Practices", content);
+                grid.appendChild(card);
+            }
+
+            // Team Structure
+            if(plan.team_structure && Object.keys(plan.team_structure).length > 0) {
+                const content = `<div class="team-grid">${Object.entries(plan.team_structure).map(([role, resp]) => `
+                    <div class="team-member-card">
+                        <div class="avatar">${role.charAt(0)}</div>
+                        <div class="info">
+                            <strong>${role}</strong>
+                            <span>${resp}</span>
+                        </div>
+                    </div>
+                `).join('')}</div>`;
+                const card = createCard("👥 Team Structure", content);
+                grid.appendChild(card);
+            }
+
+            // Roadmap
+            if(plan.roadmap?.length > 0) {
+                const content = `<ul>${plan.roadmap.map(item => `<li>${item}</li>`).join('')}</ul>`;
+                const card = createCard("🚀 Roadmap", content, "list-card");
+                grid.appendChild(card);
+            }
+
+            // Risks
+            if(plan.risks?.length > 0) {
+                const content = `<ul>${plan.risks.map(risk => `<li>${risk}</li>`).join('')}</ul>`;
+                const card = createCard("⚠️ Risks & Pitfalls", content, "list-card");
+                grid.appendChild(card);
+            }
+
+            // Next Steps
+            if(plan.next_steps?.length > 0) {
+                const content = `<ul>${plan.next_steps.map(step => `<li>${step}</li>`).join('')}</ul>`;
+                const card = createCard("➡️ Next Steps", content, "list-card");
+                grid.appendChild(card);
+            }
+        }
+
+        function createCard(title, content, additionalClass = '') {
+            const card = document.createElement("div");
+            card.className = `plan-card ${additionalClass}`;
+            card.innerHTML = `<h3>${title}</h3><div class="card-content">${content}</div>`;
+            return card;
+        }
+    </script>
+</body>
+</html>
