@@ -1,0 +1,14 @@
+langchain
+langchain-community
+langchain-huggingface
+langchain-groq
+chromadb
+sentence-transformers
+pypdf
+fastapi
+uvicorn
+SQLAlchemy
+pydantic
+python-dotenv
+python-multipart
+langchain-chroma>=0.1.2
