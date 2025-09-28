@@ -121,5 +121,3 @@ For feedback, support, or collaboration:
 <p align="center">
   &copy; 2025 DocuAI Navigator — Smarter, Faster, AI-driven Collaboration
 </p>
-
-Would you like me to also **write a short tagline-style banner (PNG)** that you can upload into `/docs/banner.png`, so we can replace the top text with an image for extra polish?
