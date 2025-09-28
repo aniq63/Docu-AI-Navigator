@@ -114,7 +114,7 @@ Feel free to fork this repo and submit a pull request.
 ## 📧 Contact
 
 For feedback, support, or collaboration:
-📩 **[support@docuai.com](aniqramzan5758@gmail.com)**
+📩 **aniqramzan5758@gmail.com**
 
 ---
 
