@@ -105,7 +105,9 @@ The **`docs/` folder** contains:
 ---
 ## Screenshots
 ![image alt](https://github.com/aniq63/Docu-AI-Navigator/blob/main/Capture.PNG)
+
 ![image alt](https://github.com/aniq63/Docu-AI-Navigator/blob/main/Capture1.PNG)
+
 ![image alt](https://github.com/aniq63/Docu-AI-Navigator/blob/main/Capture2.PNG)
 ---
 
